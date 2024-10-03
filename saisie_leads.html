@@ -98,6 +98,10 @@
             .container {
                 padding: 20px;
             }
+            button {
+                width: 100%; /* Faire les boutons plein largeur */
+                margin-top: 10px; /* Ajouter un peu d'espace entre les boutons */
+            }
         }
     </style>
 </head>
@@ -141,7 +145,7 @@
 
             <div>
                 <label for="telephone">Téléphone :</label>
-                <input type="tel" id="telephone" name="telephone" pattern="[0-9]{10}" required placeholder="Ex: 0612345678">
+                <input type="tel" id="telephone" name="telephone" required>
             </div>
 
             <div>
@@ -150,6 +154,7 @@
             </div>
 
             <button type="submit">Envoyer</button>
+            <button type="button" id="resetButton">Effacer le formulaire</button>
         </form>
     </div>
 
