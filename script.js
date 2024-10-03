@@ -55,11 +55,12 @@ function handleFormSubmit(e) {
     const urlParams = new URLSearchParams(leadData);
     const uniqueUrl = `${baseUrl}&${urlParams.toString()}`;
 
+    console.log("Envoi des données à l'API:", leadData); // Ajout de log pour vérifier les données
     sendLeadData(uniqueUrl, leadData);
 }
 
 function sendLeadData(url, data) {
-    fetch(url, { method: 'GET' }) // Assurez-vous que la méthode GET est correcte
+    fetch(url, { method: 'GET' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors de l\'envoi à l\'API');
@@ -77,6 +78,7 @@ function sendLeadData(url, data) {
 }
 
 function saveToLocalDatabase(data) {
+    console.log("Sauvegarde des données:", data); // Ajout de log pour vérifier les données
     const request = indexedDB.open('LeadsDatabase', 1);
 
     request.onsuccess = function(event) {
@@ -115,6 +117,7 @@ function displayLeads() {
 
         getAllRequest.onsuccess = function(event) {
             const leads = event.target.result;
+            console.log("Leads récupérés:", leads); // Ajout de log pour vérifier les données récupérées
             const tableBody = document.querySelector('#leadsTable tbody');
             if (tableBody) {
                 tableBody.innerHTML = ''; // Vider le tableau existant
@@ -125,12 +128,12 @@ function displayLeads() {
                 } else {
                     leads.forEach(lead => {
                         const row = tableBody.insertRow();
-                        row.insertCell(0).textContent = lead.nom;
-                        row.insertCell(1).textContent = lead.prenom;
-                        row.insertCell(2).textContent = lead.email;
-                        row.insertCell(3).textContent = lead.telephone;
-                        row.insertCell(4).textContent = `${lead.adresse}, ${lead.cp} ${lead.ville}`;
-                        row.insertCell(5).textContent = new Date(lead.DateFormulaire).toLocaleString();
+                        row.insertCell(0).textContent = lead.nom || 'N/A';
+                        row.insertCell(1).textContent = lead.prenom || 'N/A';
+                        row.insertCell(2).textContent = lead.email || 'N/A';
+                        row.insertCell(3).textContent = lead.telephone || 'N/A';
+                        row.insertCell(4).textContent = `${lead.adresse || 'N/A'}, ${lead.cp || 'N/A'} ${lead.ville || 'N/A'}`;
+                        row.insertCell(5).textContent = new Date(lead.DateFormulaire).toLocaleString() || 'N/A';
                     });
                 }
             }
