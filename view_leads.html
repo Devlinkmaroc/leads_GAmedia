@@ -5,37 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisation des leads</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 1000px; margin: 0 auto; padding: 20px; }
-        h1 { color: #333; }
-        #leadList { margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        button { padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; margin-bottom: 10px; }
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --background-color: #f0f0f0;
+            --text-color: #333;
+            --input-background: #fff;
+            --input-border: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid var(--input-border);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            table {
+                font-size: 14px;
+            }
+            th, td {
+                padding: 8px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Visualisation des leads stockés localement</h1>
-    <button id="refreshButton">Rafraîchir la liste</button>
-    <div id="leadList">
+    <div class="container">
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+        <h1>Visualisation des leads stockés localement</h1>
         <table id="leadsTable">
             <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Prénom</th>
-                    <th>Email</th>
-                    <th>Téléphone</th>
+                    <th>Civilité</th>
                     <th>Adresse</th>
-                    <th>Date de soumission</th>
+                    <th>Code Postal</th>
+                    <th>Ville</th>
+                    <th>Téléphone</th>
+                    <th>Email</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Les leads seront ajoutés ici dynamiquement -->
+                <!-- Les données seront insérées ici par JavaScript -->
             </tbody>
         </table>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const leadsTable = document.getElementById('leadsTable').getElementsByTagName('tbody')[0];
+            const storedLeads = JSON.parse(localStorage.getItem('leads')) || [];
+
+            storedLeads.forEach(lead => {
+                const row = leadsTable.insertRow();
+                Object.values(lead).forEach(value => {
+                    const cell = row.insertCell();
+                    cell.textContent = value;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
