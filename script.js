@@ -37,18 +37,20 @@ function handleFormSubmit(e) {
 }
 
 function sendLeadData(url, data) {
-    // Envoi à l'API externe
-    fetch(url, { method: 'GET' })
-        .then(response => response.json())
+    fetch(url, { method: 'POST' }) // Changer en POST si nécessaire
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erreur lors de l\'envoi à l\'API');
+            }
+            return response.json();
+        })
         .then(result => {
             console.log('Réponse de l\'API:', result);
-            // Sauvegarde dans la base de données locale
             saveToLocalDatabase(data);
         })
         .catch(error => {
             console.error('Erreur lors de l\'envoi à l\'API:', error);
-            // Sauvegarde quand même dans la base de données locale en cas d'erreur
-            saveToLocalDatabase(data);
+            saveToLocalDatabase(data); // Sauvegarde même en cas d'erreur
         });
 }
 
