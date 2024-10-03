@@ -11,24 +11,39 @@
             margin: 0 auto;
             padding: 20px;
             text-align: center;
+            background-color: #f0f0f0;
         }
         h1 {
             color: #333;
+            margin-bottom: 30px;
         }
         .button {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 15px 30px;
             margin: 10px;
             background-color: #4CAF50;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
     </style>
 </head>
 <body>
-    <h1>Gestion des Leads</h1>
-    <a href="index.html" class="button">Saisie des Leads</a>
-    <a href="view_leads.html" class="button">Visualisation des Leads</a>
+    <div class="container">
+        <h1>Gestion des Leads</h1>
+        <a href="saisie_leads.html" class="button">Saisie des Leads</a>
+        <a href="view_leads.html" class="button">Visualisation des Leads</a>
+    </div>
 </body>
 </html>
