@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const leadForm = document.getElementById('leadForm');
+    const resetButton = document.getElementById('resetButton');
     const refreshButton = document.getElementById('refreshButton');
 
     // Créer ou ouvrir la base de données IndexedDB
@@ -24,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (leadForm) {
         leadForm.addEventListener('submit', handleFormSubmit);
+    }
+
+    if (resetButton) {
+        resetButton.addEventListener('click', function() {
+            leadForm.reset();
+        });
     }
 
     if (refreshButton) {
@@ -52,7 +59,7 @@ function handleFormSubmit(e) {
 }
 
 function sendLeadData(url, data) {
-    fetch(url, { method: 'POST' }) // Vérifiez si POST est approprié
+    fetch(url, { method: 'GET' }) // Assurez-vous que la méthode GET est correcte
         .then(response => {
             if (!response.ok) {
                 throw new Error('Erreur lors de l\'envoi à l\'API');
