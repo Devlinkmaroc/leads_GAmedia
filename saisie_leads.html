@@ -3,47 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire de saisie des leads</title>
+    <title>Saisie des leads</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        form { display: grid; gap: 10px; }
-        label { font-weight: bold; }
-        input, select { width: 100%; padding: 5px; }
-        button { padding: 10px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --background-color: #f0f0f0;
+            --text-color: #333;
+            --input-background: #fff;
+            --input-border: #ddd;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: grid;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--secondary-color);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Formulaire de saisie des leads</h1>
-    <form id="leadForm">
-        <label for="nom">Nom :</label>
-        <input type="text" id="nom" name="nom" required>
+    <div class="container">
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+        <h1>Formulaire de saisie des leads</h1>
+        <form id="leadForm">
+            <div>
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required>
+            </div>
 
-        <label for="prenom">Prénom :</label>
-        <input type="text" id="prenom" name="prenom" required>
+            <div>
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" required>
+            </div>
 
-        <label for="civilite">Civilité :</label>
-        <select id="civilite" name="civilite" required>
-            <option value="Monsieur">Monsieur</option>
-            <option value="Madame">Madame</option>
-        </select>
+            <div>
+                <label for="civilite">Civilité :</label>
+                <select id="civilite" name="civilite" required>
+                    <option value="Monsieur">Monsieur</option>
+                    <option value="Madame">Madame</option>
+                </select>
+            </div>
 
-        <label for="adresse">Adresse :</label>
-        <input type="text" id="adresse" name="adresse" required>
+            <div>
+                <label for="adresse">Adresse :</label>
+                <input type="text" id="adresse" name="adresse" required>
+            </div>
 
-        <label for="cp">Code Postal :</label>
-        <input type="text" id="cp" name="cp" required>
+            <div>
+                <label for="cp">Code Postal :</label>
+                <input type="text" id="cp" name="cp" required>
+            </div>
 
-        <label for="ville">Ville :</label>
-        <input type="text" id="ville" name="ville" required>
+            <div>
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" required>
+            </div>
 
-        <label for="telephone">Téléphone :</label>
-        <input type="tel" id="telephone" name="telephone" required>
+            <div>
+                <label for="telephone">Téléphone :</label>
+                <input type="tel" id="telephone" name="telephone" required>
+            </div>
 
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" required>
+            <div>
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-        <button type="submit">Envoyer</button>
-    </form>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
 
     <script src="script.js"></script>
 </body>
