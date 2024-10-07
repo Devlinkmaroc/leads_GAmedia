@@ -4,37 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisation des leads</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-color: #4CAF50;
             --secondary-color: #45a049;
-            --background-color: #f0f0f0;
+            --background-color: #f5f5f5;
             --text-color: #333;
             --input-background: #fff;
             --input-border: #ddd;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
+            padding: 20px;
         }
 
         .container {
+            max-width: 1000px;
+            margin: 0 auto;
             background-color: white;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         h1 {
             color: var(--primary-color);
             text-align: center;
             margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .table-container {
+            overflow-x: auto;
         }
 
         table {
@@ -44,18 +56,21 @@
         }
 
         th, td {
-            border: 1px solid var(--input-border);
             padding: 12px;
             text-align: left;
+            border-bottom: 1px solid var(--input-border);
         }
 
         th {
             background-color: var(--primary-color);
             color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
         }
 
         tr:nth-child(even) {
-            background-color: #f2f2f2;
+            background-color: #f9f9f9;
         }
 
         .back-link {
@@ -71,18 +86,59 @@
             color: var(--secondary-color);
         }
 
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
             }
+
             .container {
                 padding: 20px;
             }
+
+            h1 {
+                font-size: 24px;
+            }
+
             table {
                 font-size: 14px;
             }
+
             th, td {
                 padding: 8px;
+            }
+
+            th {
+                font-size: 12px;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            button {
+                width: 100%;
+                margin-top: 10px;
             }
         }
     </style>
@@ -91,37 +147,52 @@
     <div class="container">
         <a href="index.html" class="back-link">← Retour à l'accueil</a>
         <h1>Visualisation des leads stockés localement</h1>
-        <table id="leadsTable">
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Prénom</th>
-                    <th>Civilité</th>
-                    <th>Adresse</th>
-                    <th>Code Postal</th>
-                    <th>Ville</th>
-                    <th>Téléphone</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Les données seront insérées ici par JavaScript -->
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table id="leadsTable">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Civilité</th>
+                        <th>Adresse</th>
+                        <th>Code Postal</th>
+                        <th>Ville</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les données seront insérées ici par JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <button id="refreshButton">Rafraîchir la liste</button>
     </div>
 
+    <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const leadsTable = document.getElementById('leadsTable').getElementsByTagName('tbody')[0];
-            const storedLeads = JSON.parse(localStorage.getItem('leads')) || [];
+            function displayLeads() {
+                const leadsTable = document.getElementById('leadsTable').getElementsByTagName('tbody')[0];
+                const storedLeads = JSON.parse(localStorage.getItem('leads')) || [];
 
-            storedLeads.forEach(lead => {
-                const row = leadsTable.insertRow();
-                Object.values(lead).forEach(value => {
-                    const cell = row.insertCell();
-                    cell.textContent = value;
+                // Effacer le contenu actuel du tableau
+                leadsTable.innerHTML = '';
+
+                storedLeads.forEach(lead => {
+                    const row = leadsTable.insertRow();
+                    Object.values(lead).forEach(value => {
+                        const cell = row.insertCell();
+                        cell.textContent = value;
+                    });
                 });
-            });
+            }
+
+            // Afficher les leads au chargement de la page
+            displayLeads();
+
+            // Ajouter un écouteur d'événements pour le bouton de rafraîchissement
+            document.getElementById('refreshButton').addEventListener('click', displayLeads);
         });
     </script>
 </body>
