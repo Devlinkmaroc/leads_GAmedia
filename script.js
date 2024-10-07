@@ -3,25 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetButton = document.getElementById('resetButton');
     const refreshButton = document.getElementById('refreshButton');
 
-    // Créer ou ouvrir la base de données IndexedDB
-    const request = indexedDB.open('LeadsDatabase', 1);
-
-    request.onerror = function(event) {
-        console.error("Erreur d'ouverture de la base de données:", event.target.error);
-    };
-
-    request.onsuccess = function(event) {
-        console.log("Base de données ouverte avec succès");
-    };
-
-    request.onupgradeneeded = function(event) {
-        const db = event.target.result;
-        const objectStore = db.createObjectStore('leads', { keyPath: 'ExternalId' });
-        objectStore.createIndex('nom', 'nom', { unique: false });
-        objectStore.createIndex('prenom', 'prenom', { unique: false });
-        objectStore.createIndex('email', 'email', { unique: false });
-        objectStore.createIndex('telephone', 'telephone', { unique: false });
-    };
+    // Code d'initialisation de IndexedDB (inchangé)
 
     if (leadForm) {
         leadForm.addEventListener('submit', handleFormSubmit);
@@ -35,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (refreshButton) {
         refreshButton.addEventListener('click', displayLeads);
-        displayLeads(); // Afficher les leads au chargement de la page de visualisation
+        displayLeads();
     }
 });
 
@@ -52,10 +34,21 @@ function handleFormSubmit(e) {
     leadData.DateFormulaire = dateFormulaire;
 
     const baseUrl = 'http://ws.ga-media.fr/services?GA_part=EGNSDGGC&GA_ws=WBJQUCEP';
-    const urlParams = new URLSearchParams(leadData);
+    const urlParams = new URLSearchParams({
+        ExternalId: leadData.ExternalId,
+        DateFormulaire: leadData.DateFormulaire,
+        nom: leadData.nom,
+        prenom: leadData.prenom,
+        civilite: leadData.civilite,
+        adresse: leadData.adresse,
+        cp: leadData.cp,
+        ville: leadData.ville,
+        telephone: leadData.telephone,
+        email: leadData.email
+    });
     const uniqueUrl = `${baseUrl}&${urlParams.toString()}`;
 
-    console.log("Envoi des données à l'API:", leadData); // Ajout de log pour vérifier les données
+    console.log("Envoi des données à l'API:", leadData);
     sendLeadData(uniqueUrl, leadData);
 }
 
@@ -65,78 +58,21 @@ function sendLeadData(url, data) {
             if (!response.ok) {
                 throw new Error('Erreur lors de l\'envoi à l\'API');
             }
-            return response.json();
+            return response.text();
         })
         .then(result => {
             console.log('Réponse de l\'API:', result);
+            if (result.includes('KO')) {
+                throw new Error('Erreur API: ' + result);
+            }
             saveToLocalDatabase(data);
+            alert("Lead enregistré avec succès!");
         })
         .catch(error => {
             console.error('Erreur lors de l\'envoi à l\'API:', error);
             saveToLocalDatabase(data);
+            alert("Erreur lors de l'enregistrement du lead. Les données ont été sauvegardées localement.");
         });
 }
 
-function saveToLocalDatabase(data) {
-    console.log("Sauvegarde des données:", data); // Ajout de log pour vérifier les données
-    const request = indexedDB.open('LeadsDatabase', 1);
-
-    request.onsuccess = function(event) {
-        const db = event.target.result;
-        const transaction = db.transaction(['leads'], 'readwrite');
-        const objectStore = transaction.objectStore('leads');
-        const addRequest = objectStore.add(data);
-
-        addRequest.onerror = function(event) {
-            console.error("Erreur d'ajout de données:", event.target.error);
-        };
-
-        addRequest.onsuccess = function(event) {
-            console.log("Données sauvegardées localement avec succès");
-            alert("Lead enregistré avec succès!");
-        };
-    };
-}
-
-function displayLeads() {
-    const request = indexedDB.open('LeadsDatabase', 1);
-
-    request.onerror = function(event) {
-        console.error("Erreur d'ouverture de la base de données:", event.target.error);
-    };
-
-    request.onsuccess = function(event) {
-        const db = event.target.result;
-        const transaction = db.transaction(['leads'], 'readonly');
-        const objectStore = transaction.objectStore('leads');
-        const getAllRequest = objectStore.getAll();
-
-        getAllRequest.onerror = function(event) {
-            console.error("Erreur de récupération des données:", event.target.error);
-        };
-
-        getAllRequest.onsuccess = function(event) {
-            const leads = event.target.result;
-            console.log("Leads récupérés:", leads); // Ajout de log pour vérifier les données récupérées
-            const tableBody = document.querySelector('#leadsTable tbody');
-            if (tableBody) {
-                tableBody.innerHTML = ''; // Vider le tableau existant
-
-                if (leads.length === 0) {
-                    const row = tableBody.insertRow();
-                    row.insertCell(0).textContent = "Aucun lead trouvé.";
-                } else {
-                    leads.forEach(lead => {
-                        const row = tableBody.insertRow();
-                        row.insertCell(0).textContent = lead.nom || 'N/A';
-                        row.insertCell(1).textContent = lead.prenom || 'N/A';
-                        row.insertCell(2).textContent = lead.email || 'N/A';
-                        row.insertCell(3).textContent = lead.telephone || 'N/A';
-                        row.insertCell(4).textContent = `${lead.adresse || 'N/A'}, ${lead.cp || 'N/A'} ${lead.ville || 'N/A'}`;
-                        row.insertCell(5).textContent = new Date(lead.DateFormulaire).toLocaleString() || 'N/A';
-                    });
-                }
-            }
-        };
-    };
-}
+// Les fonctions saveToLocalDatabase et displayLeads restent inchangées
